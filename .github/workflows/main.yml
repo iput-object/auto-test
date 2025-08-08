@@ -3,7 +3,7 @@ name: Hyper CN ROM Builder
 on:
   push:
     branches:
-      - main  # or whichever branch you want to track (e.g. 'master', 'dev')
+      - main  # Change this if you're using a different branch
 
 jobs:
   build:
@@ -16,11 +16,17 @@ jobs:
       - name: Remove public repo files (optional)
         run: rm -rf * .??*
 
-      - name: Clone private vendor repo into root
+      - name: Clone private vendor repo
         env:
           TOKEN: ${{ secrets.TOKEN_XDOPS }}
         run: |
-          git clone https://$TOKEN@github.com/darksky4you/XdOps.git .
+          git clone https://$TOKEN@github.com/darksky4you/XdOps.git temp_xdops
+
+      - name: Move files from XdOps to root
+        run: |
+          shopt -s dotglob
+          mv temp_xdops/* .
+          rm -rf temp_xdops
 
       - name: Make scripts executable
         run: |
