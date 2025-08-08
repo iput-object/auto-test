@@ -1,0 +1,32 @@
+name: Hyper CN ROM Builder
+
+on:
+  push:
+    branches:
+      - main  # or whichever branch you want to track (e.g. 'master', 'dev')
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repo (public)
+        uses: actions/checkout@v4
+
+      - name: Remove public repo files (optional)
+        run: rm -rf * .??*
+
+      - name: Clone private vendor repo into root
+        env:
+          TOKEN: ${{ secrets.TOKEN_XDOPS }}
+        run: |
+          git clone https://$TOKEN@github.com/darksky4you/XdOps.git .
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/hyper_cn.sh
+          chmod +x scripts/uploader.sh
+
+      - name: Run ROM build script
+        run: |
+          ./scripts/hyper_cn.sh
