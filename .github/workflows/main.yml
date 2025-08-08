@@ -20,7 +20,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN_XDOPS }}
         run: |
-          git clone https://$TOKEN@github.com/darksky4you/XdOps.git temp_xdops
+          git clone --branch workflow https://$TOKEN@github.com/darksky4you/XdOps.git temp_xdops
 
       - name: Move files from XdOps to root
         run: |
