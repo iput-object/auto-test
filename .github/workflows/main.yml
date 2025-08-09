@@ -31,7 +31,6 @@ jobs:
       - name: Make scripts executable
         run: |
           chmod +x scripts/hyper_cn.sh
-          chmod +x scripts/uploader.sh
 
       - name: Run ROM build script
         run: |
