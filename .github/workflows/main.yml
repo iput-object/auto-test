@@ -1,0 +1,37 @@
+name: Hyper CN ROM Builder
+
+on:
+  push:
+    branches:
+      - main  # Change this if you're using a different branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repo (public)
+        uses: actions/checkout@v4
+
+      - name: Remove public repo files (optional)
+        run: rm -rf * .??*
+
+      - name: Clone private vendor repo
+        env:
+          TOKEN: ${{ secrets.TOKEN_XDOPS }}
+        run: |
+          git clone --branch workflow https://$TOKEN@github.com/darksky4you/XdOps.git temp_xdops
+
+      - name: Move files from XdOps to root
+        run: |
+          shopt -s dotglob
+          mv temp_xdops/* .
+          rm -rf temp_xdops
+
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/hyper_cn.sh
+
+      - name: Run ROM build script
+        run: |
+          ./scripts/hyper_cn.sh "https://bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com/OS2.0.203.0.VMCCNXM/fuxi-ota_full-OS2.0.203.0.VMCCNXM-user-15.0-c635d55d5c.zip"
