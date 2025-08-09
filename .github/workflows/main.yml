@@ -1,9 +1,12 @@
 name: Hyper CN ROM Builder
 
 on:
-  push:
-    branches:
-      - main  # Change this if you're using a different branch
+  workflow_dispatch:
+    inputs:
+      ota_url:
+        description: 'OTA full zip URL'
+        required: true
+        default: 'https://bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com/OS2.0.203.0.VMCCNXM/fuxi-ota_full-OS2.0.203.0.VMCCNXM-user-15.0-c635d5c.zip'
 
 jobs:
   build:
@@ -34,4 +37,4 @@ jobs:
 
       - name: Run ROM build script
         run: |
-          ./scripts/hyper_cn.sh "https://bkt-sgp-miui-ota-update-alisgp.oss-ap-southeast-1.aliyuncs.com/OS2.0.203.0.VMCCNXM/fuxi-ota_full-OS2.0.203.0.VMCCNXM-user-15.0-c635d55d5c.zip"
+          ./scripts/hyper_cn.sh "${{ github.event.inputs.ota_url }}"
