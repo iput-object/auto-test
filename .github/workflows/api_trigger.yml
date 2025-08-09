@@ -1,0 +1,17 @@
+name: API Trigger
+
+on:
+  repository_dispatch:
+    types: [trigger_build]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Hyper CN Builder
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/hyper_cn.yml/dispatches \
+            -d "{\"ref\":\"main\", \"inputs\": {\"ota_link\": \"${{ github.event.client_payload.ota_link }}\", \"pixeldrain_key\": \"${{ github.event.client_payload.pixeldrain_key }}\", \"telegram_username\": \"${{ github.event.client_payload.telegram_username }}\"}}"
