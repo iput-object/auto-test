@@ -1,0 +1,35 @@
+name: Hyper CN ROM Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      ota_link:
+        description: 'OTA Link'
+        required: true
+        type: string
+      pixeldrain_key:
+        description: 'Pixeldrain API Key'
+        required: true
+        type: string
+      telegram_username:
+        description: 'Telegram Username'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Make script executable
+        run: chmod +x scripts/hyper_cn.sh
+
+      - name: Run build
+        run: |
+          ./scripts/hyper_cn.sh \
+            "${{ github.event.inputs.ota_link }}" \
+            "${{ github.event.inputs.pixeldrain_key }}" \
+            "${{ github.event.inputs.telegram_username }}"
